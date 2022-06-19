@@ -1,0 +1,66 @@
+name: Linux
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+        compiler: [g++-11, clang++-14]
+        configuration: [Debug, Release]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Add toolchain PPA
+      if: matrix.compiler == 'g++-11'
+      run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+      
+    - name: Install compiler
+      run: sudo apt-get update && sudo apt-get install -y ${{ matrix.compiler }}
+
+    - name: Configure CMake
+      run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_CXX_COMPILER=${{ matrix.compiler }} -D BUILD_TESTS=1 -S . -B build/${{ matrix.configuration }}
+
+    - name: Build
+      run: cmake --build build/${{ matrix.configuration }} -j $(nproc --all)
+      
+    - name: Run
+      run: build/${{ matrix.configuration }}/CircularBuffer
+
+  tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+        compiler: [g++-11, clang++-14]
+        configuration: [Debug]
+            
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Add toolchain PPA
+      if: matrix.compiler == 'g++-11'
+      run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+      
+    - name: Install compiler
+      run: sudo apt-get update && sudo apt-get install -y ${{ matrix.compiler }}
+
+    - name: Configure CMake
+      run: cmake -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_CXX_COMPILER=${{ matrix.compiler }} -D BUILD_TESTS=1 -S . -B build/${{ matrix.configuration }}
+
+    - name: Build
+      run: cmake --build build/${{ matrix.configuration }} -j $(nproc --all)
+      
+    - name: Run unit tests
+      run: |
+        cd build/${{ matrix.configuration }}
+        ctest --output-on-failure --schedule-random -j $(nproc --all)
