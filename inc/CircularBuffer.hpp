@@ -41,6 +41,9 @@ namespace lfr {
 
         [[nodiscard]]
         constexpr bool empty() const noexcept;
+
+        [[nodiscard]]
+        constexpr bool full() const noexcept;
     
         constexpr size_type size() const noexcept;
         constexpr size_type max_size() const noexcept;
@@ -59,19 +62,15 @@ namespace lfr {
 
     private:
         using underlying_container = std::array<T, N>;
+
         underlying_container data;
         internal::WrappingIndex<N> head = 0;
         internal::WrappingIndex<N> tail = 0;
         size_type items = 0;
 
-        [[nodiscard]]
-        constexpr bool full() const noexcept;
-
         template< class _T, std::size_t _N >
         friend std::ostream& operator<<(std::ostream& os, const CircularBuffer< _T, _N >& obj);
     };
-
-    template< class T, std::size_t N >
-    constexpr void swap( CircularBuffer<T,N>& lhs,
-                         CircularBuffer<T,N>& rhs ) noexcept;
 }
+
+#include "CircularBuffer.hh"
