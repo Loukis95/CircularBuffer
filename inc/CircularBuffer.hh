@@ -173,6 +173,90 @@ namespace lfr {
     }
     
     template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::iterator
+    CircularBuffer<T,N>::begin() noexcept
+    {
+        return iterator(this, head, items);
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_iterator
+    CircularBuffer<T,N>::begin() const noexcept
+    {
+        return cbegin();
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_iterator
+    CircularBuffer<T,N>::cbegin() const noexcept
+    {
+        return const_iterator(this, head, items);
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::iterator
+    CircularBuffer<T,N>::end() noexcept
+    {
+        return iterator(this, tail, 0);
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_iterator
+    CircularBuffer<T,N>::end() const noexcept
+    {
+        return cend();
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_iterator
+    CircularBuffer<T,N>::cend() const noexcept
+    {
+        return const_iterator(this, tail, 0);
+    }
+    
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::reverse_iterator
+    CircularBuffer<T,N>::rbegin() noexcept
+    {
+        return std::make_reverse_iterator(end());
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_reverse_iterator
+    CircularBuffer<T,N>::rbegin() const noexcept
+    {
+        return std::make_reverse_iterator(end());
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_reverse_iterator
+    CircularBuffer<T,N>::crbegin() const noexcept
+    {
+        return std::make_reverse_iterator(cend());
+    }
+    
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::reverse_iterator
+    CircularBuffer<T,N>::rend() noexcept
+    {
+        return std::make_reverse_iterator(begin());
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_reverse_iterator
+    CircularBuffer<T,N>::rend() const noexcept
+    {
+        return std::make_reverse_iterator(begin());
+    }
+
+    template< class T, std::size_t N >
+    inline constexpr typename CircularBuffer<T,N>::const_reverse_iterator
+    CircularBuffer<T,N>::crend() const noexcept
+    {
+        return std::make_reverse_iterator(cbegin());
+    }
+
+    template< class T, std::size_t N >
     std::ostream& operator<<(std::ostream& os, const CircularBuffer< T, N >& obj)
     {
         std::size_t end;
