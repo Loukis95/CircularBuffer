@@ -72,7 +72,7 @@ jobs:
         os: [ubuntu-22.04]
         compiler: [g++-11]
         configuration: [Debug]
-            
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -99,6 +99,8 @@ jobs:
       run: sh ./scripts/generate_coverage_report.sh coverage/Debug
       
     - name: Publish coverage data
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       uses: crazy-max/ghaction-github-pages@v3.0.0
       with:
         build_dir: coverage/html
