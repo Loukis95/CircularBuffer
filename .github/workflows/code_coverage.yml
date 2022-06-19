@@ -45,4 +45,4 @@ jobs:
       with:
         build_dir: coverage/html
         keep_history: "true"
-        target_branch: gh-pages
+        target_branch: gh-pages/develop
