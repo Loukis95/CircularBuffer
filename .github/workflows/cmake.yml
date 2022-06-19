@@ -99,4 +99,8 @@ jobs:
       run: sh ./scripts/generate_coverage_report.sh coverage/Debug
       
     - name: Publish coverage data
-      run: echo "Not ready yet"
+      uses: crazy-max/ghaction-github-pages@v3.0.0
+      with:
+        build_dir: coverage/html
+        keep_history: "true"
+        target_branch: gh-pages/test
